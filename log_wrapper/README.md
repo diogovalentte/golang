@@ -12,6 +12,6 @@ go build .
 ./log_wrapper -database-folder=<path> -database-name=<name> -python-script=<file.py>
 ```
 3. By default the log_wrapper is executed without verbose, but you can activate using the -v flag. This will show the SQL insert queries for logs and errors in the SQLite database.
-4. ```bash
+```bash
 ./log_wrapper -database-folder=<path> -database-name=<name> -python-script=<file.py> -v
 ```
