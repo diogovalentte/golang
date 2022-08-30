@@ -18,7 +18,7 @@ var wg = sync.WaitGroup{}
 func main() {
 	// Flags
 	actualDirName, _ := os.Getwd()
-	dirName := flag.String("folder", actualDirName, "Folder to create SQLite database file")
+	dirName := flag.String("database-folder", actualDirName, "Folder to create SQLite database file")
 	databaseFileName := flag.String("database-name", "temp_log.db", "SQLite database file name")
 	pythonScriptPath := flag.String("python-script", "", "Absolute path to python script")
 
