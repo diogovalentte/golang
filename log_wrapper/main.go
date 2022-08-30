@@ -21,12 +21,13 @@ func main() {
 	dirName := flag.String("database-folder", actualDirName, "Folder to create SQLite database file")
 	databaseFileName := flag.String("database-name", "temp_log.db", "SQLite database file name")
 	pythonScriptPath := flag.String("python-script", "", "Absolute path to python script")
+	verbose := flag.Bool("v", false, "Show SQL queries for inserting Logs and Errors in SQLite database")
 
 	flag.Parse()
 
 	// Database set up
 	databaseFilePath := filepath.Join(*dirName, *databaseFileName)
-	lw, err := database.CreateDB(databaseFilePath)
+	lw, err := database.CreateDB(&databaseFilePath, verbose)
 	if err != nil {
 		log.Fatalf("Fatal Error while creating Database: %v", err)
 	}

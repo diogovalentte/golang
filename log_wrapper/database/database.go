@@ -9,13 +9,14 @@ import (
 	_ "modernc.org/sqlite"
 )
 
-func CreateDB(databaseFilePath string) (*LogWrapper, error) {
+func CreateDB(databaseFilePath *string, verbose *bool) (*LogWrapper, error) {
 	// Create sqlite database file, and "logs" and "errors" tables if not exists
 	logWrapper := &LogWrapper{
-		DatabaseFilePath: databaseFilePath,
+		DatabaseFilePath: *databaseFilePath,
+		Verbose:          *verbose,
 	}
 
-	db, err := sql.Open("sqlite", databaseFilePath)
+	db, err := sql.Open("sqlite", *databaseFilePath)
 	if err != nil {
 		return logWrapper, err
 	}
@@ -49,6 +50,9 @@ type LogWrapper struct {
 
 	// DatabaseFilePath is the sqlite database file path
 	DatabaseFilePath string
+
+	// Verbose if true, show SQL queries for inserting Logs and Errors in SQLite database
+	Verbose bool
 }
 
 type LogValues struct {
@@ -85,9 +89,12 @@ func (LogWrapper) ProcessError(errMessage string) *ErrorValues {
 	return &errorValues
 }
 
-func register(db *sql.DB, table string, tstamp, message *string) error {
+func register(db *sql.DB, table string, tstamp, message *string, verbose *bool) error {
 	query := fmt.Sprintf("insert into %v values ('%v', '%v')", table, *tstamp, *message)
-	fmt.Println(query)
+
+	if *verbose {
+		fmt.Println(query)
+	}
 	_, err := db.Exec(query)
 	if err != nil {
 		return err
@@ -103,7 +110,7 @@ func (lw LogWrapper) RegisterLog(logValues *LogValues) error {
 	}
 	defer db.Close()
 
-	err = register(db, "logs", &logValues.TimeStamp, &logValues.Message)
+	err = register(db, "logs", &logValues.TimeStamp, &logValues.Message, &lw.Verbose)
 	if err != nil {
 		return err
 	}
@@ -118,7 +125,7 @@ func (lw LogWrapper) RegisterErr(errorValues *ErrorValues) error {
 	}
 	defer db.Close()
 
-	err = register(db, "errors", &errorValues.TimeStamp, &errorValues.Message)
+	err = register(db, "errors", &errorValues.TimeStamp, &errorValues.Message, &lw.Verbose)
 	if err != nil {
 		return err
 	}
