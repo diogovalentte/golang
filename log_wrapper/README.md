@@ -1,5 +1,7 @@
 # Log Wrapper
 ### This project execute a python script and continually read the stdout and stderr from the python script to process and register in a SQLite database for logging purposes.
+---
+##### Obs: The python script should produces logs like "[timestamp]: log message"
 
 ---
 ## How to use this project:
