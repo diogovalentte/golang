@@ -7,10 +7,10 @@ import (
 	"path/filepath"
 	"sync"
 
+	"github.com/enriquebris/goconcurrentqueue"
+
 	"github.com/diogovalentte/golang/log_wrapper/database"
 	"github.com/diogovalentte/golang/log_wrapper/script"
-
-	"github.com/enriquebris/goconcurrentqueue"
 )
 
 var wg = sync.WaitGroup{}
